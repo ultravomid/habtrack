@@ -622,13 +622,13 @@ function renderStats(){
 
 /* ---------------- EXPORT / IMPORT ---------------- */
 function refreshExport(){
- const payload={app:'razaq-habit-tracker',version:2,exportedAt:new Date().toISOString(),habits,done};
+ const payload={app:'habit-tracker',version:2,exportedAt:new Date().toISOString(),habits,done};
  document.getElementById('jsonOut').value=JSON.stringify(payload,null,2);
 }
 function status(msg,err){const el=document.getElementById('dStatus');el.textContent=msg;el.className='dstatus '+(err?'err':'ok');}
 document.getElementById('btnExport').onclick=()=>{
  refreshExport();const str=document.getElementById('jsonOut').value;
- try{const blob=new Blob([str],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='razaq-habit-tracker-'+ds(new Date())+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},120);status('Downloaded. (If your browser blocked it, use Copy below.)');}
+ try{const blob=new Blob([str],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='habit-tracker-'+ds(new Date())+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},120);status('Downloaded. (If your browser blocked it, use Copy below.)');}
  catch(e){status('Download blocked here — use Copy below instead.',true);}
 };
 document.getElementById('btnCopy').onclick=()=>{
