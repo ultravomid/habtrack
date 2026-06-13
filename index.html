@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Razaq Habit Tracker</title>
+<meta name="description" content="Razaq Habit Tracker — daily habits, IELTS prep, and the road to Saudi Aramco / ARO Drilling.">
+<meta name="theme-color" content="#0A1622">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Razaq Tracker">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230A1622'/><circle cx='32' cy='34' r='12' fill='%23FF8A3D'/><g stroke='%23FFB454' stroke-width='3' stroke-linecap='round'><line x1='32' y1='12' x2='32' y2='17'/><line x1='32' y1='51' x2='32' y2='56'/><line x1='12' y1='34' x2='17' y2='34'/><line x1='47' y1='34' x2='52' y2='34'/><line x1='18' y1='20' x2='21' y2='23'/><line x1='43' y1='45' x2='46' y2='48'/><line x1='46' y1='20' x2='43' y2='23'/><line x1='21' y1='45' x2='18' y2='48'/></g></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%230A1622'/><circle cx='32' cy='34' r='12' fill='%23FF8A3D'/><g stroke='%23FFB454' stroke-width='3' stroke-linecap='round'><line x1='32' y1='12' x2='32' y2='17'/><line x1='32' y1='51' x2='32' y2='56'/><line x1='12' y1='34' x2='17' y2='34'/><line x1='47' y1='34' x2='52' y2='34'/><line x1='18' y1='20' x2='21' y2='23'/><line x1='43' y1='45' x2='46' y2='48'/><line x1='46' y1='20' x2='43' y2='23'/><line x1='21' y1='45' x2='18' y2='48'/></g></svg>">
+<style>
+:root{
+  --night:#0A1622; --night2:#10212F; --steel:#1B4D66; --steel2:#2C7DA0;
+  --dawn:#FF8A3D; --gold:#FFB454; --ember:#FF6B4A;
+  --paper:#F6F2E9; --card:#FFFFFF; --ink:#0F1B26; --muted:#7A8896;
+  --line:#E6DFD1; --ok:#1FB562;
+  --c-gen:#2C7DA0; --c-eng:#1F9C7C; --c-og:#E0791A; --c-jp:#B5476B;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--night);color:var(--ink);-webkit-font-smoothing:antialiased;}
+.wrap{max-width:760px;margin:0 auto;background:var(--paper);min-height:100vh;}
+
+.hd{position:relative;overflow:hidden;padding:22px 20px 26px;color:#F6F2E9;
+  background:radial-gradient(140% 120% at 80% -30%, rgba(255,138,61,.45), transparent 55%),radial-gradient(120% 100% at 10% -20%, rgba(44,125,160,.35), transparent 50%),linear-gradient(165deg,var(--night),var(--night2) 65%,var(--steel));}
+.hd::after{content:"";position:absolute;left:0;right:0;bottom:0;height:46%;background:linear-gradient(to top, rgba(255,138,61,.16), transparent);pointer-events:none;}
+.hd .greet{font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);position:relative;}
+.hd h1{font-size:25px;font-weight:900;letter-spacing:-.4px;margin-top:4px;position:relative;}
+.hd .date{font-size:12px;color:rgba(246,242,233,.65);margin-top:3px;position:relative;}
+.hd .quote{font-size:12px;color:rgba(246,242,233,.8);margin-top:12px;position:relative;line-height:1.5;border-left:2px solid var(--dawn);padding-left:10px;}
+
+.ringcard{margin:16px 18px -22px;background:var(--card);border-radius:20px;padding:16px;display:flex;gap:16px;align-items:center;box-shadow:0 18px 44px -18px rgba(0,0,0,.55);position:relative;z-index:5;}
+.ring{width:104px;height:104px;flex-shrink:0;position:relative;}
+.ring .lab{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ring .pct{font-size:25px;font-weight:900;color:var(--night2);line-height:1;}
+.ring .cap{font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-top:3px;}
+.rmeta{flex:1;}
+.rmeta .big{font-size:15px;font-weight:800;}
+.rmeta .sm{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45;}
+.rmeta .streakpill{display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:#FFF1E2;color:#A8530E;font-size:12px;font-weight:800;padding:4px 11px;border-radius:30px;}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;padding:34px 14px 6px;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tb{flex:0 0 auto;font-size:12px;font-weight:800;padding:9px 13px;border:none;background:transparent;color:var(--muted);border-radius:11px;cursor:pointer;white-space:nowrap;transition:.15s;}
+.tb.on{background:var(--night2);color:#F6F2E9;}
+
+.pan{display:none;padding:12px 16px 44px;}
+.pan.on{display:block;animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.note{font-size:12px;color:#5b6775;line-height:1.55;margin-bottom:14px;}
+
+.daynav{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:9px 10px;margin-bottom:12px;}
+.daynav button{background:transparent;border:none;font-size:20px;font-weight:800;color:var(--steel2);cursor:pointer;padding:0 10px;line-height:1;}
+.daynav button:disabled{color:#DCD4C4;cursor:default;}
+.daynav .dlbl{font-size:13px;font-weight:800;text-align:center;min-width:160px;}
+.daynav .todaybtn{font-size:11px;font-weight:800;background:var(--dawn);color:#fff;border-radius:20px;padding:5px 11px;margin-left:4px;}
+
+.week{display:flex;gap:6px;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 12px;margin-bottom:14px;}
+.wd{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.wd .bar{width:100%;max-width:30px;height:54px;background:#EFE9DC;border-radius:7px;display:flex;align-items:flex-end;overflow:hidden;}
+.wd .fill{width:100%;background:linear-gradient(to top,var(--dawn),var(--gold));border-radius:7px;transition:height .4s ease;}
+.wd .dl{font-size:10px;font-weight:700;color:var(--muted);}
+.wd.today .dl{color:var(--dawn);}
+.wd.today .bar{outline:2px solid var(--dawn);outline-offset:1px;}
+.wd .vv{font-size:9px;font-weight:800;color:#9aa6b3;}
+
+.catrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.catcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 14px;cursor:pointer;transition:.15s;}
+.catcard:active{transform:scale(.98);}
+.catcard .ct{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;}
+.catcard .frac{font-size:20px;font-weight:900;margin-top:7px;}
+.catcard .pbar{height:6px;background:#EFE9DC;border-radius:6px;margin-top:7px;overflow:hidden;}
+.catcard .pfill{height:100%;border-radius:6px;transition:width .4s;}
+
+.movers{background:linear-gradient(150deg,var(--night2),var(--steel));border-radius:18px;padding:15px 16px;color:#F6F2E9;margin-bottom:6px;}
+.movers h3{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.mv{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.1);cursor:pointer;}
+.mv:last-child{border-bottom:none;}
+.mv .mbox{width:22px;height:22px;border-radius:7px;border:2px solid var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.mv.done .mbox{background:var(--ok);border-color:var(--ok);}
+.mv .mbox svg{width:12px;height:12px;opacity:0;}
+.mv.done .mbox svg{opacity:1;}
+.mv .mt{font-size:13px;font-weight:600;}
+.mv.done .mt{text-decoration:line-through;opacity:.6;}
+.mv .mw{font-size:11px;color:rgba(246,242,233,.55);margin-left:auto;}
+
+.grouphd{font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:16px 2px 8px;}
+.habit{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:11px 12px;margin-bottom:8px;transition:.15s;}
+.habit.done{background:#F4FBF6;border-color:#C6EAD4;}
+.hbox{width:23px;height:23px;border-radius:7px;border:2px solid var(--steel2);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;}
+.habit.done .hbox{background:var(--ok);border-color:var(--ok);}
+.hbox svg{width:12px;height:12px;opacity:0;transition:.1s;}
+.habit.done .hbox svg{opacity:1;}
+.hbody{flex:1;min-width:0;cursor:pointer;}
+.hname{font-size:13px;font-weight:600;color:var(--ink);word-break:break-word;}
+.habit.done .hname{text-decoration:line-through;color:var(--muted);}
+.hsub{font-size:11px;color:var(--muted);margin-top:1px;}
+.hstreak{font-size:11px;font-weight:800;color:#A8530E;background:#FFF1E2;border-radius:20px;padding:2px 8px;white-space:nowrap;}
+.hstreak.zero{color:#9aa6b3;background:#F0EBDE;}
+.hbtn{background:none;border:none;font-size:15px;cursor:pointer;padding:2px 3px;line-height:1;color:#B9A98E;}
+.hbtn:active{color:var(--steel2);}
+.hbtn.del:active{color:var(--ember);}
+
+.hedit{flex:1;display:flex;flex-direction:column;gap:6px;}
+.hedit .row1{display:flex;gap:6px;}
+.hedit input{border:1px solid var(--steel2);border-radius:9px;padding:8px 10px;font-size:13px;font-family:inherit;color:var(--ink);width:100%;}
+.hedit input.t{flex:0 0 70px;}
+.hedit .acts{display:flex;gap:6px;}
+.hedit button{flex:1;border:none;border-radius:9px;padding:8px;font-size:12px;font-weight:800;cursor:pointer;}
+.hedit .save{background:var(--ok);color:#fff;}
+.hedit .cancel{background:#EDE7D9;color:#6b7785;}
+
+.addbar{display:flex;gap:7px;margin-top:6px;}
+.addbar input{flex:1;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:13px;background:var(--card);color:var(--ink);font-family:inherit;}
+.addbar input:focus{outline:2px solid var(--steel2);border-color:transparent;}
+.addbar input.t{flex:0 0 70px;}
+.addbtn{border:none;background:var(--night2);color:#fff;font-weight:800;font-size:13px;border-radius:11px;padding:0 15px;cursor:pointer;}
+
+.resetbar{display:flex;gap:8px;margin-top:14px;}
+.rbtn{flex:1;border:1px dashed var(--line);background:transparent;color:var(--muted);font-size:12px;font-weight:700;border-radius:12px;padding:11px;cursor:pointer;}
+
+.reslist{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin-bottom:6px;}
+.reslist .rh{font-size:12px;font-weight:800;color:var(--ink);margin-bottom:9px;}
+.restag{display:inline-block;font-size:11px;font-weight:700;background:#EEF4F7;color:var(--steel2);padding:4px 9px;border-radius:8px;margin:0 5px 5px 0;}
+.callout{border-radius:14px;padding:12px 14px;font-size:12px;line-height:1.55;margin:12px 0;}
+.callout.amber{background:#FFF3E5;border:1px solid var(--dawn);color:#8a3d00;}
+.callout.teal{background:#E9F5F1;border:1px solid #2BB89A;color:#0f5e4d;}
+
+.target{background:linear-gradient(150deg,var(--night2),var(--steel));border-radius:18px;padding:16px 18px;color:#fff;margin-bottom:14px;}
+.target .th{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.target .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.target .cell{text-align:center;}
+.target .ex{font-size:10px;color:rgba(255,255,255,.6);}
+.target .sc{font-size:22px;font-weight:900;color:var(--gold);}
+.target .nt{font-size:9px;color:rgba(255,255,255,.5);}
+.target .now{margin-top:11px;font-size:11px;color:rgba(255,255,255,.78);background:rgba(0,0,0,.2);border-radius:10px;padding:9px 11px;line-height:1.5;}
+.gcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:13px;}
+.gcard .gh{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:800;margin-bottom:10px;}
+.prof{font-size:12px;line-height:1.6;color:#4a5663;}
+.prof b{color:var(--ink);}
+.strength{display:flex;gap:9px;align-items:flex-start;margin-bottom:8px;}
+.strength .k{color:var(--ok);font-weight:900;flex-shrink:0;}
+.strength span{font-size:12px;color:#4a5663;line-height:1.5;}
+.road{position:relative;padding-left:24px;}
+.road::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:3px;background:linear-gradient(var(--steel2),var(--dawn));border-radius:3px;}
+.stop{position:relative;margin-bottom:15px;}
+.stop::before{content:"";position:absolute;left:-20px;top:3px;width:13px;height:13px;border-radius:50%;background:var(--dawn);border:3px solid var(--card);}
+.stop .ph{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--steel2);}
+.stop h4{font-size:13px;font-weight:800;margin-top:1px;}
+.stop p{font-size:12px;color:#5b6775;line-height:1.5;margin-top:3px;}
+
+.tl{position:relative;padding-left:22px;}
+.tl::before{content:"";position:absolute;left:7px;top:4px;bottom:4px;width:3px;background:linear-gradient(var(--c-eng),var(--steel2));border-radius:3px;}
+.tlx{position:relative;margin-bottom:14px;}
+.tlx::before{content:"";position:absolute;left:-18px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--c-eng);border:3px solid var(--card);}
+.tlx .mo{font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--c-eng);}
+.tlx h4{font-size:13px;font-weight:800;margin-top:1px;}
+.tlx p{font-size:12px;color:#5b6775;line-height:1.5;margin-top:3px;}
+.tlx .band{display:inline-block;margin-top:5px;font-size:10px;font-weight:800;background:#E7F5F1;color:#0f7a5f;padding:2px 9px;border-radius:20px;}
+
+.co{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:9px;}
+.co .rank{flex-shrink:0;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#fff;}
+.co .cname{font-size:13px;font-weight:800;color:var(--ink);}
+.co .cdesc{font-size:11px;color:#5b6775;line-height:1.45;margin-top:2px;}
+.co .ctag{display:inline-block;font-size:9px;font-weight:800;background:#FFF1E2;color:#a8530e;padding:2px 7px;border-radius:6px;margin-top:5px;}
+.ladder{}
+.lstep{display:flex;gap:11px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line);}
+.lstep:last-child{border-bottom:none;}
+.lstep .num{flex-shrink:0;width:26px;height:26px;border-radius:50%;background:var(--c-og);color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;}
+.lstep .lr{font-size:13px;font-weight:700;color:var(--ink);}
+.lstep .ly{font-size:11px;color:var(--muted);margin-top:1px;}
+
+/* CALENDAR */
+.calhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.calnav{background:var(--card);border:1px solid var(--line);width:36px;height:36px;border-radius:11px;font-size:17px;font-weight:800;color:var(--steel2);cursor:pointer;}
+.calTitle{font-size:15px;font-weight:800;}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;}
+.cwh{font-size:10px;font-weight:800;color:var(--muted);text-align:center;padding-bottom:2px;}
+.ccell{aspect-ratio:1;border-radius:9px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer;background:var(--card);}
+.ccell.empty{border:none;background:transparent !important;cursor:default;}
+.ccell.today{outline:2px solid var(--steel2);outline-offset:-2px;}
+.ccell.sel{box-shadow:0 0 0 2px var(--dawn);}
+.callegend{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:11px;font-size:10px;color:var(--muted);font-weight:700;}
+.callegend .bar{flex:1;max-width:160px;height:8px;border-radius:6px;background:linear-gradient(to right,#EFE9DC,rgba(255,138,61,.45),rgba(255,138,61,.9));}
+
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0;}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:11px 6px;text-align:center;}
+.stat .v{font-size:19px;font-weight:900;color:var(--steel2);}
+.stat .l{font-size:8.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:3px;}
+
+.dcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:13px;}
+.dcard .gh{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:800;margin-bottom:6px;}
+.dcard p.sub{font-size:11.5px;color:#5b6775;line-height:1.5;margin-bottom:11px;}
+.drow{display:flex;gap:8px;margin-bottom:10px;}
+.dbtn{flex:1;border:none;border-radius:11px;padding:11px 12px;font-size:12.5px;font-weight:800;cursor:pointer;}
+.dbtn.primary{background:var(--night2);color:#fff;}
+.dbtn.ghost{background:#EDE7D9;color:#5b6775;}
+.dbtn.go{background:var(--ok);color:#fff;}
+textarea.json{width:100%;min-height:84px;border:1px solid var(--line);border-radius:11px;padding:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:#33404d;resize:vertical;background:#FBF8F1;}
+.dstatus{font-size:12px;font-weight:700;margin-top:8px;min-height:16px;}
+.dstatus.ok{color:var(--ok);}
+.dstatus.err{color:var(--ember);}
+
+.foot{text-align:center;font-size:10px;color:var(--muted);padding:18px 20px 30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hd">
+    <div class="greet" id="greet">Good morning</div>
+    <h1>Razaq Habit Tracker</h1>
+    <div class="date" id="dateLine">—</div>
+    <div class="quote">A seat at Saudi Aramco / ARO Drilling is built one logged day at a time. Show up before sunrise — consistency is your edge.</div>
+  </div>
+
+  <div class="ringcard">
+    <div class="ring">
+      <svg viewBox="0 0 120 120" width="104" height="104">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#EBE4D5" stroke-width="11"/>
+        <circle id="ring" cx="60" cy="60" r="50" fill="none" stroke="#FF8A3D" stroke-width="11" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .55s ease"/>
+      </svg>
+      <div class="lab"><div class="pct" id="ringPct">0%</div><div class="cap" id="ringCap">Today</div></div>
+    </div>
+    <div class="rmeta">
+      <div class="big" id="ringBig">Let's begin</div>
+      <div class="sm" id="ringSm">Check off your first habit below.</div>
+      <div class="streakpill" id="bestStreak">🔥 0-day best streak</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tb on" data-p="today">🌅 Today</button>
+    <button class="tb" data-p="general">🌿 General</button>
+    <button class="tb" data-p="english">🇬🇧 English</button>
+    <button class="tb" data-p="og">🛢️ O&amp;G</button>
+    <button class="tb" data-p="japanese">🎌 Japanese</button>
+    <button class="tb" data-p="goals">🎯 Goals</button>
+    <button class="tb" data-p="career">🏆 Dream Career</button>
+    <button class="tb" data-p="data">📆 Calendar &amp; Data</button>
+  </div>
+
+  <!-- TODAY -->
+  <div class="pan on" id="today">
+    <div class="note">Tap a habit to log it. Use ◀ ▶ to log a different day. Tap a category card to manage it.</div>
+    <div class="daynav">
+      <button id="dPrev" title="Previous day">‹</button>
+      <div class="dlbl" id="dLbl">—</div>
+      <button id="dNext" title="Next day">›</button>
+      <button class="todaybtn" id="dToday" style="display:none">Today</button>
+    </div>
+    <div class="week" id="weekStrip"></div>
+    <div class="catrow" id="catRow"></div>
+    <div class="movers" id="movers"><h3>⚡ Dream Movers</h3><div id="moverList"></div></div>
+    <div class="resetbar">
+      <button class="rbtn" id="resetToday">↺ Clear this day</button>
+      <button class="rbtn" id="restoreBtn">⟳ Restore my routine</button>
+    </div>
+  </div>
+
+  <!-- GENERAL -->
+  <div class="pan" id="general">
+    <div class="note">Your foundation: faith, body, fuel, self-care, home, money. ✎ edits text · ✕ deletes.</div>
+    <div id="generalList"></div>
+    <div class="addbar"><input id="genName" placeholder="Add a general habit…"><input id="genTime" class="t" placeholder="time"><button class="addbtn" data-cat="general" data-name="genName" data-time="genTime">Add</button></div>
+  </div>
+
+  <!-- ENGLISH -->
+  <div class="pan" id="english">
+    <div class="note">Your road to <b>IELTS 6.5</b> (clears KFUPM Direct PhD + KAUST). Speaking is the priority — Stimuler &amp; Naila fix the hesitation.</div>
+    <div id="englishList"></div>
+    <div class="addbar"><input id="engName" placeholder="Add an English habit…"><input id="engTime" class="t" placeholder="time"><button class="addbtn" data-cat="english" data-name="engName" data-time="engTime">Add</button></div>
+    <div class="reslist" style="margin-top:14px;">
+      <div class="rh">📚 Your English toolkit</div>
+      <span class="restag">🦉 Duolingo</span><span class="restag">🎙️ Stimuler</span><span class="restag">🧠 Brain app</span><span class="restag">📘 IELTS Yola</span><span class="restag">👩‍🏫 Naila</span><span class="restag">📗 English for Oil Industry 1 &amp; 2</span><span class="restag">📝 Cambridge 500</span><span class="restag">🏛️ 6 Minute English</span>
+    </div>
+    <div class="callout amber">💡 In Stimuler &amp; with Naila, talk about <b>your own work</b> — engine commissioning, vibration analysis, well control. You build fluency in the exact vocabulary your career needs.</div>
+  </div>
+
+  <!-- O&G -->
+  <div class="pan" id="og">
+    <div class="callout teal">🛢️ <b>You already hold IWCF Level 1</b> — completing well control before it's required signals readiness for the next level and is noticed by crew managers.</div>
+    <div class="note">Daily oil &amp; gas learning — keep compounding your technical edge.</div>
+    <div id="ogList"></div>
+    <div class="addbar"><input id="ogName" placeholder="Add an O&G habit…"><input id="ogTime" class="t" placeholder="time"><button class="addbtn" data-cat="og" data-name="ogName" data-time="ogTime">Add</button></div>
+    <div class="callout amber">🔥 Next credential: <b>BOSIET / HUET</b> offshore survival (OPITO) — mandatory to step on any offshore rig. With IWCF + BOSIET + your inspection background, you're a serious ARO Drilling candidate.</div>
+  </div>
+
+  <!-- JAPANESE -->
+  <div class="pan" id="japanese">
+    <div class="note">A bonus language that widens your global options. Small daily reps add up.</div>
+    <div id="japaneseList"></div>
+    <div class="addbar"><input id="jpName" placeholder="Add a Japanese habit…"><input id="jpTime" class="t" placeholder="time"><button class="addbtn" data-cat="japanese" data-name="jpName" data-time="jpTime">Add</button></div>
+  </div>
+
+  <!-- GOALS -->
+  <div class="pan" id="goals">
+    <div class="target">
+      <div class="th">🎯 KFUPM Direct PhD — Real Requirements</div>
+      <div class="g3">
+        <div class="cell"><div class="ex">TOEFL iBT</div><div class="sc">80</div><div class="nt">KAUST: 81</div></div>
+        <div class="cell"><div class="ex">IELTS</div><div class="sc">6.5</div><div class="nt">KAUST: 6.5</div></div>
+        <div class="cell"><div class="ex">Duolingo</div><div class="sc">120</div><div class="nt">KAUST: n/a</div></div>
+      </div>
+      <div class="now">📍 You now: <b>Duolingo 105</b> (need 120, +15) · <b>PTE 46</b> · <b>TOEFL ~65 est.</b> Real level ~B1; PhD needs B2. GPA <b>3.40 ✓</b> clears the 3.00 bar.</div>
+    </div>
+
+    <div class="gcard">
+      <div class="gh">🧭 IELTS 6.5 — Your 6-Month Timeline</div>
+      <div class="tl">
+        <div class="tlx"><div class="mo">Month 1–2 · Foundation</div><h4>Fix the base, diagnose</h4><p>Daily speaking (Stimuler + Naila), Cambridge vocab, learn all 4 IELTS sections. Take 1 diagnostic test.</p><span class="band">Target band ~5.0</span></div>
+        <div class="tlx"><div class="mo">Month 3–4 · Skills</div><h4>Section strategy + timed practice</h4><p>Writing Task 1 &amp; 2 structure, Reading skim/scan under time, Listening note-taking, Speaking cue cards recorded daily.</p><span class="band">Target band ~5.5–6.0</span></div>
+        <div class="tlx"><div class="mo">Month 5 · Intensive</div><h4>Full mock tests weekly</h4><p>One complete timed test each week + deep error analysis. Drill your two weakest sections hardest.</p><span class="band">Target band ~6.0–6.5</span></div>
+        <div class="tlx"><div class="mo">Month 6 · Exam</div><h4>Polish &amp; sit IELTS</h4><p>Final mocks, book the test, sit it confident. Backup: retake Duolingo for 120 (only +15 away).</p><span class="band">Goal: 6.5 ✅</span></div>
+      </div>
+      <div class="callout amber" style="margin-bottom:0;">Why IELTS: accepted by <b>both</b> KFUPM Direct PhD and KAUST, most prep resources, and your daily podcast + speaking stack maps straight onto its format.</div>
+    </div>
+
+    <div class="gcard">
+      <div class="gh">👷 Your Profile — Why You're Strong</div>
+      <div class="prof" style="margin-bottom:12px;"><b>Maulana Ahmad Razaq Payapo</b> — Mechanical Inspection Engineer @ Chiyoda International (PT Smelting). BEng Marine Engineering, ITS · GPA 3.40 · PPA scholarship awardee.</div>
+      <div class="strength"><span class="k">✓</span><span><b>Marine engineering core</b> — a jack-up rig / drillship is a marine structure. You already understand its power and systems.</span></div>
+      <div class="strength"><span class="k">✓</span><span><b>IWCF Level 1</b> — well-control fundamentals, the credential drilling employers look for.</span></div>
+      <div class="strength"><span class="k">✓</span><span><b>Heavy rotating-equipment commissioning</b> — main &amp; aux engines, gensets to 15.5 MW. Transfers directly to rig power.</span></div>
+      <div class="strength"><span class="k">✓</span><span><b>Condition monitoring &amp; inspection</b> — vibration, alignment, thermography, NDT. The maintenance skillset rigs need.</span></div>
+      <div class="strength"><span class="k">✓</span><span><b>Standards fluency</b> — P&amp;ID, SLD, Caterpillar / Rolls-Royce / class-society specs.</span></div>
+    </div>
+  </div>
+
+  <!-- DREAM CAREER -->
+  <div class="pan" id="career">
+    <div class="note">Your #1 dream: <b>Saudi Aramco</b> or a prestige drilling operator in the Gulf. Here's the real landscape and a path that fits you.</div>
+    <div class="gcard">
+      <div class="gh">🏆 Target Employers (Gulf O&amp;G Drilling)</div>
+      <div class="co"><div class="rank" style="background:#1B7A3D">1</div><div><div class="cname">ARO Drilling</div><div class="cdesc">JV between Saudi Aramco &amp; Valaris, operating premium jack-up rigs in Saudi Arabia (20 new-builds over 10 yrs). Hires Mechanical Engineers, Maintenance Technicians, Derrickmen, Drillers, Roustabouts &amp; HSE — any nationality, based in Khobar / Dammam.</div><span class="ctag">★ Best fit for you</span></div></div>
+      <div class="co"><div class="rank" style="background:#0A6B7A">2</div><div><div class="cname">Saudi Aramco (EXPEC / Drilling)</div><div class="cdesc">World's largest oil &amp; gas company. Drilling engineering &amp; operations; very competitive, wants strong English + a degree. The PhD route strengthens this.</div><span class="ctag">Prestige goal</span></div></div>
+      <div class="co"><div class="rank" style="background:#C9911A">3</div><div><div class="cname">ADNOC Drilling (UAE)</div><div class="cdesc">Abu Dhabi's national drilling company — huge fleet, strong hiring, near Saudi. Excellent alternative entry to the Gulf.</div><span class="ctag">Near Saudi</span></div></div>
+      <div class="co"><div class="rank" style="background:#5A6B7A">4</div><div><div class="cname">Shelf / Valaris / Transocean / Saipem</div><div class="cdesc">Global offshore contractors with Middle East rigs. Good for banking international rig experience.</div><span class="ctag">Global routes</span></div></div>
+    </div>
+    <div class="gcard">
+      <div class="gh">🪜 The Drilling Crew Ladder</div>
+      <div class="prof" style="margin-bottom:10px;">Standard offshore progression. Starting at the bottom is fine — field competence earns promotion, and certifications accelerate every step.</div>
+      <div class="ladder">
+        <div class="lstep"><div class="num">1</div><div><div class="lr">Roustabout</div><div class="ly">Entry, no experience needed. Deck support, equipment moves. ~1–2 yrs.</div></div></div>
+        <div class="lstep"><div class="num">2</div><div><div class="lr">Roughneck / Floorhand</div><div class="ly">Works the drill floor, handles pipe. ~2–3 yrs.</div></div></div>
+        <div class="lstep"><div class="num">3</div><div><div class="lr">Derrickman</div><div class="ly">Works at height, manages pipe racking &amp; fluids.</div></div></div>
+        <div class="lstep"><div class="num">4</div><div><div class="lr">Assistant Driller → Driller</div><div class="ly">Operates &amp; supervises the floor. ~5–8 yrs from entry.</div></div></div>
+        <div class="lstep"><div class="num">5</div><div><div class="lr">Toolpusher → OIM → Rig Manager</div><div class="ly">Runs the rig. ~8–12 yrs field time.</div></div></div>
+      </div>
+      <div class="callout teal" style="margin-bottom:0;">⚡ <b>Your shortcut:</b> skilled mechanical/marine trades + IWCF shorten the early stages. Better yet, enter on the <b>maintenance/mechanical track</b> (Rig Mechanic → Senior Mechanic → Maintenance Supervisor) — it matches your CV far more directly.</div>
+    </div>
+    <div class="gcard">
+      <div class="gh">🧑‍💼 A Realistic Path Like Yours</div>
+      <div class="prof" style="margin-bottom:10px;">A realistic composite trajectory (not one person) for marine/mechanical engineers who reach Gulf drilling:</div>
+      <div class="tl">
+        <div class="tlx"><div class="mo">Stage 1</div><h4>Marine / Mechanical degree</h4><p>Plus early commissioning / inspection roles (← you're here, and ahead, with IWCF).</p></div>
+        <div class="tlx"><div class="mo">Stage 2</div><h4>Get offshore-ready</h4><p>BOSIET/HUET + offshore medical + IELTS 6+. Apply to ARO/ADNOC as Rig Mechanic, Maintenance Technician, or Assistant Driller.</p></div>
+        <div class="tlx"><div class="mo">Stage 3</div><h4>2–4 years offshore</h4><p>Bank rig time, renew well control, build a clean safety record. Move up the maintenance or drilling track.</p></div>
+        <div class="tlx"><div class="mo">Stage 4</div><h4>Specialist / Supervisor or Drilling Engineer</h4><p>With a PhD added, pivot to Drilling/Completion Engineer at Aramco. Without it, rise to Maintenance Supervisor / Senior Driller. Both reach the prestige tier.</p></div>
+      </div>
+      <div class="callout amber" style="margin-bottom:0;">🔎 <b>On LinkedIn:</b> search “Drilling Engineer ARO Drilling”, “Rig Mechanic ADNOC”, “Assistant Driller Saudi Aramco”, filter for marine/mechanical engineering backgrounds, and study their exact steps. Follow ARO Drilling &amp; ADNOC Drilling pages for openings.</div>
+    </div>
+  </div>
+
+  <!-- CALENDAR & DATA -->
+  <div class="pan" id="data">
+    <div class="note">Your history at a glance — and a safe backup. Tap any day to open it. <b>Export before I upgrade your HTML</b>, then import into the new file to keep every check-in.</div>
+
+    <div class="calhd">
+      <button class="calnav" id="calPrev">‹</button>
+      <div class="calTitle" id="calTitle">—</div>
+      <button class="calnav" id="calNext">›</button>
+    </div>
+    <div class="calgrid" id="calGrid"></div>
+    <div class="callegend"><span>0%</span><div class="bar"></div><span>100%</span></div>
+
+    <div class="statgrid" id="statGrid"></div>
+
+    <div class="dcard">
+      <div class="gh">⬇️ Export backup</div>
+      <p class="sub">Saves all your habits + every day's check-ins as a JSON file. Keep it before upgrading.</p>
+      <div class="drow">
+        <button class="dbtn primary" id="btnExport">Download .json</button>
+        <button class="dbtn ghost" id="btnCopy">Copy</button>
+      </div>
+      <textarea class="json" id="jsonOut" readonly placeholder="Your backup will appear here…"></textarea>
+    </div>
+
+    <div class="dcard">
+      <div class="gh">⬆️ Import / restore</div>
+      <p class="sub">Paste a backup here and import to restore your progress (e.g. into a new version of this file).</p>
+      <textarea class="json" id="jsonIn" placeholder="Paste your backup JSON here…"></textarea>
+      <div class="drow" style="margin-top:10px;margin-bottom:0;">
+        <button class="dbtn go" id="btnImport">Import &amp; restore</button>
+      </div>
+      <div class="dstatus" id="dStatus"></div>
+    </div>
+  </div>
+
+  <div class="foot">Razaq Habit Tracker · saved on this device · works offline · ✎ edit · ✕ delete · + add · export anytime.</div>
+</div>
+
+<script>
+/* ---------------- SEED ---------------- */
+const SEED=[
+ {id:'g_tahajud',cat:'general',group:'Faith & Mind',name:'Tahajud',time:'02:00'},
+ {id:'g_quran',cat:'general',group:'Faith & Mind',name:'Quran — 1 ʿayn (Al-Baqarah)',time:'17:30'},
+ {id:'g_journal',cat:'general',group:'Faith & Mind',name:'Journaling',time:'21:00'},
+ {id:'g_cycle',cat:'general',group:'Body',name:'Cycling / walk 1 hr',time:'03:00'},
+ {id:'g_skip',cat:'general',group:'Body',name:'Skipping 400 reps (15 min)',time:'03:30'},
+ {id:'g_gym',cat:'general',group:'Body',name:'Gym session',time:'04:45'},
+ {id:'g_weigh',cat:'general',group:'Body',name:'Weight + neck + waist measure',time:'05:00'},
+ {id:'g_break',cat:'general',group:'Fuel & Health',name:'Breakfast (egg, oat, milk, banana)',time:'04:00'},
+ {id:'g_acv',cat:'general',group:'Fuel & Health',name:'Apple cider vinegar + chia',time:'05:00'},
+ {id:'g_med_am',cat:'general',group:'Fuel & Health',name:'Morning supplements (Vit D, Swisse)',time:'05:30'},
+ {id:'g_protein',cat:'general',group:'Fuel & Health',name:'Protein mix (0.5 scoop)',time:'06:00'},
+ {id:'g_med_pm',cat:'general',group:'Fuel & Health',name:'Night supplements',time:'20:00'},
+ {id:'g_cinnamon',cat:'general',group:'Fuel & Health',name:'Cinnamon hot water',time:'23:00'},
+ {id:'g_beauty_am',cat:'general',group:'Self-care',name:'Morning skincare (tonic, moisturizer, SPF)',time:'04:30'},
+ {id:'g_beauty_pm',cat:'general',group:'Self-care',name:'Night skincare routine',time:'20:00'},
+ {id:'g_cook',cat:'general',group:'Home',name:'Prep + cook chicken',time:'06:00'},
+ {id:'g_dinner',cat:'general',group:'Home',name:'Cook dinner',time:'19:00'},
+ {id:'g_laundry',cat:'general',group:'Home',name:'Laundry + clean room',time:'19:30'},
+ {id:'g_cash',cat:'general',group:'Money & Future',name:'Check cashflow (Money Lover)',time:'20:00'},
+ {id:'g_apply',cat:'general',group:'Money & Future',name:'Apply for jobs (ARO / ADNOC / Aramco)',time:'23:00'},
+ {id:'g_trade',cat:'general',group:'Money & Future',name:'Trading learning',time:'24:00'},
+ {id:'e_duo',cat:'english',name:'Duolingo lesson',time:'07:00'},
+ {id:'e_brain',cat:'english',name:'Brain training app',time:'07:00'},
+ {id:'e_stim',cat:'english',name:'Stimuler speaking session',time:'07:00'},
+ {id:'e_yola',cat:'english',name:'IELTS Yola class',time:'10:00'},
+ {id:'e_naila',cat:'english',name:'Naila English (speaking)',time:'13:00'},
+ {id:'e_listen',cat:'english',name:'IELTS Listening — 1 section',time:'—'},
+ {id:'e_read',cat:'english',name:'IELTS Reading — 1 passage (timed)',time:'—'},
+ {id:'e_write',cat:'english',name:'IELTS Writing — Task 1 or 2',time:'19:00'},
+ {id:'e_speak',cat:'english',name:'IELTS Speaking — cue card (record)',time:'—'},
+ {id:'e_camb',cat:'english',name:'Cambridge Word 500 — 1 row',time:'19:10'},
+ {id:'e_oil',cat:'english',name:'English for the Oil Industry — 1 unit',time:'—'},
+ {id:'e_pod',cat:'english',name:'English podcast (6 Minute / BBC)',time:'—'},
+ {id:'o_yuki',cat:'og',name:'O&G with Yuki',time:'11:00'},
+ {id:'o_petro',cat:'og',name:'Intro to Petroleum Eng. — 1 page',time:'19:30'},
+ {id:'o_slb',cat:'og',name:'SLB / Schlumberger PDF — 1',time:'20:30'},
+ {id:'o_iwcf',cat:'og',name:'IWCF well-control review',time:'—'},
+ {id:'o_book',cat:'og',name:"Read book — 'You Do You' (1 page)",time:'13:30'},
+ {id:'j_day',cat:'japanese',name:'Japanese book study',time:'21:00'},
+ {id:'j_night',cat:'japanese',name:'Japanese book (night)',time:'23:30'},
+];
+function getCss(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+const CATS={
+ general:{label:'General',icon:'🌿',color:getCss('--c-gen')},
+ english:{label:'English',icon:'🇬🇧',color:getCss('--c-eng')},
+ og:{label:'O&G',icon:'🛢️',color:getCss('--c-og')},
+ japanese:{label:'Japanese',icon:'🎌',color:getCss('--c-jp')},
+};
+const MOVERS=['e_stim','e_write','o_petro'];
+
+/* ---------------- STORAGE ---------------- */
+const mem={};
+function setLS(k,v){try{localStorage.setItem(k,v);}catch(e){mem[k]=v;}}
+function getLS(k){try{const v=localStorage.getItem(k);return v!==null?v:(k in mem?mem[k]:null);}catch(e){return (k in mem?mem[k]:null);}}
+let habits=JSON.parse(getLS('rht_habits')||'null')||SEED.map(h=>({...h}));
+let done=JSON.parse(getLS('rht_done')||'{}');
+function saveHabits(){setLS('rht_habits',JSON.stringify(habits));}
+function saveDone(){setLS('rht_done',JSON.stringify(done));}
+
+/* ---------------- DATES ---------------- */
+function ds(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function parse(s){return new Date(s+'T00:00:00');}
+const TODAY=ds(new Date());
+let viewDate=TODAY;
+function isDone(id,date){return !!done[id+'|'+date];}
+function toggle(id){if(editingId)return;const k=id+'|'+viewDate;if(done[k])delete done[k];else done[k]=1;saveDone();renderAll();}
+function streak(id){let s=0,d=new Date();if(!isDone(id,ds(d)))d.setDate(d.getDate()-1);while(isDone(id,ds(d))){s++;d.setDate(d.getDate()-1);}return s;}
+function byCat(c){return habits.filter(h=>h.cat===c);}
+function doneCount(list,date){return list.filter(h=>isDone(h.id,date)).length;}
+
+/* ---------------- HEADER / DAY NAV ---------------- */
+function renderHeader(){
+ const h=new Date().getHours();
+ document.getElementById('greet').textContent=(h<5?'Before dawn':h<11?'Good morning':h<15?'Good day':h<19?'Good afternoon':'Good evening')+' · Razaq';
+ document.getElementById('dateLine').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long'});
+}
+function renderDayNav(){
+ const isToday=viewDate===TODAY;
+ const lbl=parse(viewDate).toLocaleDateString('en-US',{weekday:'long',day:'numeric',month:'long'});
+ document.getElementById('dLbl').textContent=(isToday?'Today · ':'')+lbl;
+ document.getElementById('dNext').disabled=isToday;
+ document.getElementById('dToday').style.display=isToday?'none':'inline-block';
+}
+function shiftDay(n){const d=parse(viewDate);d.setDate(d.getDate()+n);const nd=ds(d);if(nd>TODAY)return;viewDate=nd;renderAll();}
+document.getElementById('dPrev').onclick=()=>shiftDay(-1);
+document.getElementById('dNext').onclick=()=>shiftDay(1);
+document.getElementById('dToday').onclick=()=>{viewDate=TODAY;renderAll();};
+
+/* ---------------- TODAY RENDER ---------------- */
+function renderRing(){
+ const dn=doneCount(habits,viewDate),tot=habits.length,pct=tot?Math.round(dn/tot*100):0,C=314.16;
+ document.getElementById('ring').style.strokeDashoffset=C-C*pct/100;
+ document.getElementById('ringPct').textContent=pct+'%';
+ document.getElementById('ringCap').textContent=viewDate===TODAY?'Today':parse(viewDate).toLocaleDateString('en-US',{day:'numeric',month:'short'});
+ const big=document.getElementById('ringBig'),sm=document.getElementById('ringSm');
+ if(pct===0){big.textContent='Nothing yet';sm.textContent='Tap a habit to log this day.';}
+ else if(pct<50){big.textContent='Warming up';sm.textContent=dn+' of '+tot+' done.';}
+ else if(pct<100){big.textContent='Strong progress';sm.textContent=dn+' of '+tot+' done.';}
+ else{big.textContent='Perfect day ✅';sm.textContent='All '+tot+' habits logged.';}
+ let best=0;habits.forEach(h=>{const s=streak(h.id);if(s>best)best=s;});
+ document.getElementById('bestStreak').textContent='🔥 '+best+'-day best streak';
+}
+function renderWeek(){
+ const el=document.getElementById('weekStrip');el.innerHTML='';const labs=['Su','Mo','Tu','We','Th','Fr','Sa'];
+ for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const date=ds(d),tot=habits.length,dn=doneCount(habits,date);const pct=tot?Math.round(dn/tot*100):0;const w=document.createElement('div');w.className='wd'+(date===TODAY?' today':'');w.innerHTML='<div class="vv">'+pct+'%</div><div class="bar"><div class="fill" style="height:'+pct+'%"></div></div><div class="dl">'+labs[d.getDay()]+'</div>';w.onclick=()=>{viewDate=date;renderAll();};el.appendChild(w);}
+}
+function renderCatRow(){
+ const el=document.getElementById('catRow');el.innerHTML='';
+ Object.keys(CATS).forEach(c=>{const m=CATS[c],list=byCat(c),dn=doneCount(list,viewDate),tot=list.length,pct=tot?Math.round(dn/tot*100):0;const card=document.createElement('div');card.className='catcard';card.innerHTML='<div class="ct"><span>'+m.icon+'</span>'+m.label+'</div><div class="frac" style="color:'+m.color+'">'+dn+'<span style="font-size:13px;color:var(--muted);font-weight:700">/'+tot+'</span></div><div class="pbar"><div class="pfill" style="width:'+pct+'%;background:'+m.color+'"></div></div>';card.onclick=()=>switchTab(c);el.appendChild(card);});
+}
+function renderMovers(){
+ const el=document.getElementById('moverList');el.innerHTML='';
+ MOVERS.forEach(id=>{const h=habits.find(x=>x.id===id);if(!h)return;const d=isDone(id,viewDate);const row=document.createElement('div');row.className='mv'+(d?' done':'');row.innerHTML='<div class="mbox"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="mt">'+escapeHtml(h.name)+'</div><div class="mw">🔥 '+streak(id)+'</div>';row.onclick=()=>toggle(id);el.appendChild(row);});
+}
+
+/* ---------------- LISTS + EDIT ---------------- */
+let editingId=null;
+function habitRow(h){
+ const row=document.createElement('div');row.className='habit'+(isDone(h.id,viewDate)?' done':'');
+ if(editingId===h.id){
+  row.innerHTML='<div class="hedit"><div class="row1"><input class="en" value="'+escapeAttr(h.name)+'" placeholder="habit"><input class="et t" value="'+escapeAttr(h.time||'')+'" placeholder="time"></div><div class="acts"><button class="save">Save</button><button class="cancel">Cancel</button></div></div>';
+  const en=row.querySelector('.en'),et=row.querySelector('.et');
+  row.querySelector('.save').onclick=()=>{const nm=en.value.trim();if(nm){h.name=nm;h.time=et.value.trim()||'—';saveHabits();}editingId=null;renderAll();};
+  row.querySelector('.cancel').onclick=()=>{editingId=null;renderAll();};
+  setTimeout(()=>en.focus(),30);
+  return row;
+ }
+ const s=streak(h.id);
+ row.innerHTML='<div class="hbox"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="hbody"><div class="hname">'+escapeHtml(h.name)+'</div>'+(h.time&&h.time!=='—'?'<div class="hsub">⏱ '+escapeHtml(h.time)+'</div>':'')+'</div><span class="hstreak '+(s===0?'zero':'')+'">🔥 '+s+'</span><button class="hbtn edit" title="Edit">✎</button><button class="hbtn del" title="Delete">✕</button>';
+ row.querySelector('.hbox').onclick=()=>toggle(h.id);
+ row.querySelector('.hbody').onclick=()=>toggle(h.id);
+ row.querySelector('.edit').onclick=(e)=>{e.stopPropagation();editingId=h.id;renderAll();};
+ row.querySelector('.del').onclick=(e)=>{e.stopPropagation();habits=habits.filter(x=>x.id!==h.id);saveHabits();renderAll();};
+ return row;
+}
+function renderList(cat,elId,grouped){
+ const el=document.getElementById(elId);el.innerHTML='';const list=byCat(cat);
+ if(grouped){[...new Set(list.map(h=>h.group||'Other'))].forEach(g=>{const hd=document.createElement('div');hd.className='grouphd';hd.textContent=g;el.appendChild(hd);list.filter(h=>(h.group||'Other')===g).forEach(h=>el.appendChild(habitRow(h)));});}
+ else{list.forEach(h=>el.appendChild(habitRow(h)));}
+}
+function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function escapeAttr(s){return (s||'').replace(/"/g,'&quot;');}
+
+/* ---------------- ADD ---------------- */
+document.querySelectorAll('.addbtn').forEach(b=>{b.onclick=()=>{const cat=b.dataset.cat,nameEl=document.getElementById(b.dataset.name),timeEl=document.getElementById(b.dataset.time);const name=nameEl.value.trim();if(!name)return;habits.push({id:cat+'_'+Date.now(),cat,name,time:timeEl.value.trim()||'—',group:cat==='general'?'Custom':undefined});saveHabits();nameEl.value='';timeEl.value='';renderAll();nameEl.focus();};});
+
+/* ---------------- RESET / RESTORE ---------------- */
+document.getElementById('resetToday').onclick=()=>{habits.forEach(h=>{delete done[h.id+'|'+viewDate];});saveDone();renderAll();};
+let armed=false;
+document.getElementById('restoreBtn').onclick=function(){if(!armed){armed=true;this.textContent='⚠️ Tap again to confirm';setTimeout(()=>{armed=false;this.textContent='⟳ Restore my routine';},2500);return;}habits=SEED.map(h=>({...h}));saveHabits();armed=false;this.textContent='⟳ Restore my routine';renderAll();};
+
+/* ---------------- CALENDAR ---------------- */
+let calY,calM;
+(function(){const d=new Date();calY=d.getFullYear();calM=d.getMonth();})();
+function renderCalendar(){
+ const el=document.getElementById('calGrid');el.innerHTML='';
+ document.getElementById('calTitle').textContent=new Date(calY,calM,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+ ['S','M','T','W','T','F','S'].forEach(w=>{const h=document.createElement('div');h.className='cwh';h.textContent=w;el.appendChild(h);});
+ const first=new Date(calY,calM,1).getDay(),days=new Date(calY,calM+1,0).getDate(),tot=habits.length;
+ for(let i=0;i<first;i++){const b=document.createElement('div');b.className='ccell empty';el.appendChild(b);}
+ for(let n=1;n<=days;n++){
+  const date=ds(new Date(calY,calM,n)),dc=doneCount(habits,date),pct=tot?dc/tot:0;
+  const cell=document.createElement('div');
+  cell.className='ccell'+(date===TODAY?' today':'')+(date===viewDate?' sel':'');
+  if(pct>0)cell.style.background='rgba(255,138,61,'+(0.18+0.72*pct).toFixed(2)+')';
+  cell.innerHTML='<span>'+n+'</span>';
+  cell.onclick=()=>{viewDate=date;switchTab('today');renderAll();};
+  el.appendChild(cell);
+ }
+}
+document.getElementById('calPrev').onclick=()=>{calM--;if(calM<0){calM=11;calY--;}renderCalendar();};
+document.getElementById('calNext').onclick=()=>{calM++;if(calM>11){calM=0;calY++;}renderCalendar();};
+
+/* ---------------- STATS ---------------- */
+function renderStats(){
+ const checkins=Object.keys(done).length;
+ const dates=new Set(Object.keys(done).map(k=>k.split('|')[1]));
+ let best=0;habits.forEach(h=>{const s=streak(h.id);if(s>best)best=s;});
+ const tot=habits.length;let perfect=0;
+ dates.forEach(d=>{if(tot&&doneCount(habits,d)>=tot)perfect++;});
+ const data=[['✔ '+checkins,'Check-ins'],[dates.size,'Days active'],['🔥 '+best,'Best streak'],[perfect,'Perfect days']];
+ document.getElementById('statGrid').innerHTML=data.map(s=>'<div class="stat"><div class="v">'+s[0]+'</div><div class="l">'+s[1]+'</div></div>').join('');
+}
+
+/* ---------------- EXPORT / IMPORT ---------------- */
+function refreshExport(){
+ const payload={app:'razaq-habit-tracker',version:2,exportedAt:new Date().toISOString(),habits,done};
+ document.getElementById('jsonOut').value=JSON.stringify(payload,null,2);
+}
+function status(msg,err){const el=document.getElementById('dStatus');el.textContent=msg;el.className='dstatus '+(err?'err':'ok');}
+document.getElementById('btnExport').onclick=()=>{
+ refreshExport();const str=document.getElementById('jsonOut').value;
+ try{const blob=new Blob([str],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='razaq-habit-tracker-'+ds(new Date())+'.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},120);status('Downloaded. (If your browser blocked it, use Copy below.)');}
+ catch(e){status('Download blocked here — use Copy below instead.',true);}
+};
+document.getElementById('btnCopy').onclick=()=>{
+ refreshExport();const t=document.getElementById('jsonOut');t.focus();t.select();
+ let ok=false;try{ok=document.execCommand('copy');}catch(e){}
+ try{if(navigator.clipboard)navigator.clipboard.writeText(t.value);}catch(e){}
+ status(ok?'Copied to clipboard.':'Selected — press copy (⌘/Ctrl+C).');
+};
+document.getElementById('btnImport').onclick=()=>{
+ const raw=document.getElementById('jsonIn').value.trim();
+ if(!raw){status('Paste your backup JSON first.',true);return;}
+ let obj;try{obj=JSON.parse(raw);}catch(e){status('That is not valid JSON.',true);return;}
+ if(!obj||!Array.isArray(obj.habits)||typeof obj.done!=='object'||obj.done===null){status('JSON is missing habits/done data.',true);return;}
+ habits=obj.habits.map(h=>({...h}));done=obj.done||{};saveHabits();saveDone();
+ document.getElementById('jsonIn').value='';renderAll();status('Imported! Your progress is restored. 🎉');
+};
+
+/* ---------------- TABS ---------------- */
+function switchTab(p){document.querySelectorAll('.tb').forEach(t=>t.classList.toggle('on',t.dataset.p===p));document.querySelectorAll('.pan').forEach(x=>x.classList.toggle('on',x.id===p));if(p==='data')refreshExport();window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.tb').forEach(t=>t.onclick=()=>switchTab(t.dataset.p));
+
+/* ---------------- RENDER ALL ---------------- */
+function renderAll(){renderDayNav();renderRing();renderWeek();renderCatRow();renderMovers();renderList('general','generalList',true);renderList('english','englishList',false);renderList('og','ogList',false);renderList('japanese','japaneseList',false);renderCalendar();renderStats();}
+renderHeader();renderAll();
+</script>
+</body>
+</html>
